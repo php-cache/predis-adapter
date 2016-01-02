@@ -4,6 +4,11 @@ php:
   - "5.6"
   - "5.5"
 
+services:
+  - docker
+
+sudo: required
+
 matrix:
   fast_finish: true
 
@@ -12,7 +17,7 @@ before_install:
     - pip install --user codecov
 
 before_script:
-    - tests/travis/redis_setup.sh
+    - tests/travis_setup.sh
     - travis_retry composer self-update
     - travis_retry composer install --prefer-source --no-interaction
 
