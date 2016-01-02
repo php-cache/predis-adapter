@@ -7,8 +7,6 @@ php:
 matrix:
   fast_finish: true
 
-sudo: false
-
 before_install:
     - phpenv config-rm xdebug.ini
     - pip install --user codecov
