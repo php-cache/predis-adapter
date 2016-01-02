@@ -9,27 +9,27 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Cache\Doctrine\Tests;
+namespace Cache\Adapter\Redis\Tests;
 
-use Cache\Doctrine\CachePool;
+use Cache\Adapter\Redis\CachePool;
 use Cache\IntegrationTests\TaggableCachePoolTest;
-use Doctrine\Common\Cache\ArrayCache;
+use Predis\Client;
 
 class IntegrationTagTest extends TaggableCachePoolTest
 {
-    private $doctrineCache = null;
+    private $client = null;
 
     public function createCachePool()
     {
-        return new CachePool($this->getDoctrineCache());
+        return new CachePool($this->getClient());
     }
 
-    private function getDoctrineCache()
+    private function getClient()
     {
-        if ($this->doctrineCache === null) {
-            $this->doctrineCache = new ArrayCache();
+        if ($this->client === null) {
+            $this->client = new Client('tcp:/127.0.0.1:6379');
         }
 
-        return $this->doctrineCache;
+        return $this->client;
     }
 }

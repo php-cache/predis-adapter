@@ -9,14 +9,12 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Cache\Doctrine;
+namespace Cache\Adapter\Redis;
 
-use Cache\Doctrine\Exception\InvalidArgumentException;
+use Cache\Adapter\Redis\Exception\InvalidArgumentException;
 use Cache\Taggable\TaggableItemInterface;
 use Cache\Taggable\TaggablePoolInterface;
 use Cache\Taggable\TaggablePoolTrait;
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\FlushableCache;
 use Predis\Client;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -34,22 +32,22 @@ class CachePool implements CacheItemPoolInterface, TaggablePoolInterface
     /**
      * List of invalid (or reserved) key characters.
      *
-     * @type string
+     * @var string
      */
     const KEY_INVALID_CHARACTERS = '{}()/\@:';
 
     /**
-     * @type Client
+     * @var Client
      */
     private $cache;
 
     /**
-     * @type CacheItemInterface[] deferred
+     * @var CacheItemInterface[] deferred
      */
     private $deferred = [];
 
     /**
-     * @param Cache $cache
+     * @param Client $cache
      */
     public function __construct(Client $cache)
     {
@@ -86,7 +84,7 @@ class CachePool implements CacheItemPoolInterface, TaggablePoolInterface
             return is_object($item) ? clone $item : $item;
         }
 
-        $item = $this->cache->get($key);
+        $item = unserialize($this->cache->get($key));
         if (false === $item || !$item instanceof CacheItemInterface) {
             $item = new CacheItem($key);
         }
@@ -131,7 +129,7 @@ class CachePool implements CacheItemPoolInterface, TaggablePoolInterface
         // Clear the deferred items
         $this->deferred = [];
 
-        return $this->cache->flushdb();
+        return 'OK' === $this->cache->flushdb()->getPayload();
     }
 
     /**
@@ -145,11 +143,8 @@ class CachePool implements CacheItemPoolInterface, TaggablePoolInterface
         // Delete form deferred
         unset($this->deferred[$taggedKey]);
 
-        // Is this needed?
-        $this->cache->incr($taggedKey);
-
         // Delete form cache
-        return $this->cache->del($taggedKey);
+        return $this->cache->del($taggedKey) >= 0;
     }
 
     /**
@@ -172,20 +167,21 @@ class CachePool implements CacheItemPoolInterface, TaggablePoolInterface
      */
     public function save(CacheItemInterface $item)
     {
-        $timeToLive = 0;
-        if ($item instanceof HasExpirationDateInterface) {
-            if (null !== $expirationDate = $item->getExpirationDate()) {
-                $timeToLive = $expirationDate->getTimestamp() - time();
-            }
-        }
-
         if ($item instanceof TaggableItemInterface) {
             $key = $item->getTaggedKey();
         } else {
             $key = $item->getKey();
         }
 
-        return $this->cache->setex($key, $timeToLive, $item);
+        if ($item instanceof HasExpirationDateInterface) {
+            if (null !== $expirationDate = $item->getExpirationDate()) {
+                $timeToLive = $expirationDate->getTimestamp() - time();
+
+                return 'OK' === $this->cache->setex($key, $timeToLive, serialize($item))->getPayload();
+            }
+        }
+
+        return 'OK' === $this->cache->set($key, serialize($item))->getPayload();
     }
 
     /**

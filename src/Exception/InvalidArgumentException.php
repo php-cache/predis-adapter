@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Cache\Doctrine\Exception;
+namespace Cache\Adapter\Redis\Exception;
 
 class InvalidArgumentException extends \Exception implements \Psr\Cache\InvalidArgumentException
 {

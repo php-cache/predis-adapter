@@ -27,9 +27,10 @@
     ],
     "require":
     {
-        "php":           "^5.5|^7.0",
-        "psr/cache":     "1.0.0",
-        "predis/predis": "^1.0"
+        "php":                  "^5.5|^7.0",
+        "psr/cache":            "1.0.0",
+        "cache/taggable-cache": "^0.2",
+        "predis/predis":        "^1.0"
     },
     "require-dev":
     {

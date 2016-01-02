@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Cache\Doctrine;
+namespace Cache\Adapter\Redis;
 
 use Cache\Taggable\TaggableItemInterface;
 use Cache\Taggable\TaggableItemTrait;
@@ -24,22 +24,22 @@ class CacheItem implements HasExpirationDateInterface, CacheItemInterface, Tagga
     use TaggableItemTrait;
 
     /**
-     * @type string
+     * @var string
      */
     private $key;
 
     /**
-     * @type mixed
+     * @var mixed
      */
     private $value;
 
     /**
-     * @type \DateTime|null
+     * @var \DateTime|null
      */
     private $expirationDate = null;
 
     /**
-     * @type bool
+     * @var bool
      */
     private $hasValue = false;
 
@@ -49,7 +49,7 @@ class CacheItem implements HasExpirationDateInterface, CacheItemInterface, Tagga
     public function __construct($key)
     {
         $this->taggedKey = $key;
-        $this->key       = $this->getKeyFromTaggedKey($key);
+        $this->key = $this->getKeyFromTaggedKey($key);
     }
 
     /**
@@ -65,7 +65,7 @@ class CacheItem implements HasExpirationDateInterface, CacheItemInterface, Tagga
      */
     public function set($value)
     {
-        $this->value    = $value;
+        $this->value = $value;
         $this->hasValue = true;
 
         return $this;

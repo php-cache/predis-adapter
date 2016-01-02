@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Cache\Doctrine;
+namespace Cache\Adapter\Redis;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
