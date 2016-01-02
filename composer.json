@@ -1,0 +1,55 @@
+{
+    "name":              "cache/redis-adapter",
+    "description":       "A PSR-6 cache implementation using Redis. This implementation supports tags",
+    "type":              "library",
+    "license":           "MIT",
+    "minimum-stability": "stable",
+    "keywords":
+    [
+        "cache",
+        "psr-6",
+        "redis",
+        "tag"
+    ],
+    "homepage":          "https://github.com/php-cache/doctrine-adapter",
+    "authors":
+    [
+        {
+            "name":     "Aaron Scherer",
+            "email":    "aequasi@gmail.com",
+            "homepage": "https://github.com/aequasi"
+        },
+        {
+            "name":     "Tobias Nyholm",
+            "email":    "tobias.nyholm@gmail.com",
+            "homepage": "https://github.com/nyholm"
+        }
+    ],
+    "require":
+    {
+        "php":           "^5.5|^7.0",
+        "psr/cache":     "1.0.0",
+        "predis/predis": "^1.0"
+    },
+    "require-dev":
+    {
+        "phpunit/phpunit":         "^5.1|^4.0",
+        "cache/integration-tests": "dev-master"
+    },
+    "provide":
+    {
+        "psr/cache-implementation": "1.0.0"
+    },
+    "autoload":
+    {
+        "psr-4": {
+            "Cache\\Adapter\\Redis\\": "src/"
+        }
+    },
+    "autoload-dev":
+    {
+        "psr-4": {
+            "Cache\\Adapter\\Redis\\Tests\\": "tests/"
+        }
+    }
+}
