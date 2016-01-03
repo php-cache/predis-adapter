@@ -11,7 +11,7 @@
 
 namespace Cache\Adapter\Redis;
 
-use Cache\Adapter\Common\BaseCachePool;
+use Cache\Adapter\Common\AbstractCachePool;
 use Cache\Adapter\Common\CacheItem;
 use Cache\Adapter\Common\Exception\InvalidArgumentException;
 use Cache\Taggable\TaggableItemInterface;
@@ -25,7 +25,7 @@ use Psr\Cache\CacheItemPoolInterface;
  * @author Aaron Scherer <aequasi@gmail.com>
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class RedisCachePool extends BaseCachePool
+class RedisCachePool extends AbstractCachePool
 {
     /**
      * @var Client
