@@ -25,7 +25,7 @@ use Psr\Cache\CacheItemPoolInterface;
  * @author Aaron Scherer <aequasi@gmail.com>
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class CachePool extends BaseCachePool
+class RedisCachePool extends BaseCachePool
 {
     /**
      * @var Client

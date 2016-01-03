@@ -11,7 +11,7 @@
 
 namespace Cache\Adapter\Redis\Tests;
 
-use Cache\Adapter\Redis\CachePool;
+use Cache\Adapter\Redis\RedisCachePool;
 use Cache\IntegrationTests\TaggableCachePoolTest;
 use Predis\Client;
 
@@ -21,7 +21,7 @@ class IntegrationTagTest extends TaggableCachePoolTest
 
     public function createCachePool()
     {
-        return new CachePool($this->getClient());
+        return new RedisCachePool($this->getClient());
     }
 
     private function getClient()
