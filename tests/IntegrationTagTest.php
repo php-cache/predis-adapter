@@ -9,9 +9,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Cache\Adapter\Redis\Tests;
+namespace Cache\Adapter\Predis\Tests;
 
-use Cache\Adapter\Redis\RedisCachePool;
+use Cache\Adapter\Predis\PredisCachePool;
 use Cache\IntegrationTests\TaggableCachePoolTest;
 use Predis\Client;
 
@@ -21,7 +21,7 @@ class IntegrationTagTest extends TaggableCachePoolTest
 
     public function createCachePool()
     {
-        return new RedisCachePool($this->getClient());
+        return new PredisCachePool($this->getClient());
     }
 
     private function getClient()
