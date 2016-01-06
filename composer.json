@@ -11,7 +11,7 @@
         "redis",
         "tag"
     ],
-    "homepage":          "https://github.com/php-cache/doctrine-adapter",
+    "homepage": "https://github.com/php-cache/redis-adapter",
     "authors":
     [
         {
@@ -29,7 +29,7 @@
     {
         "php":                  "^5.5|^7.0",
         "psr/cache":            "1.0.0",
-        "cache/adapter-common": "^0.1",
+        "cache/adapter-common": "^0.1.2",
         "cache/taggable-cache": "^0.2",
         "predis/predis":        "^1.0"
     },

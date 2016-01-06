@@ -42,6 +42,10 @@ class RedisCachePool extends AbstractCachePool
         $this->validateKey($key);
         $taggedKey = $this->generateCacheKey($key, $tags);
 
+        if (isset($this->deferred[$key])) {
+            return true;
+        }
+
         return $this->cache->exists($taggedKey);
     }
 
