@@ -1,6 +1,6 @@
 {
     "name":              "cache/redis-adapter",
-    "description":       "A PSR-6 cache implementation using Redis. This implementation supports tags",
+    "description":       "A PSR-6 cache implementation using Redis (Predis). This implementation supports tags",
     "type":              "library",
     "license":           "MIT",
     "minimum-stability": "stable",
@@ -9,6 +9,7 @@
         "cache",
         "psr-6",
         "redis",
+        "predis",
         "tag"
     ],
     "homepage": "https://github.com/php-cache/redis-adapter",
