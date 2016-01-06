@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Cache\Adapter\Redis;
+namespace Cache\Adapter\Predis;
 
 use Cache\Adapter\Common\AbstractCachePool;
 use Predis\Client;
@@ -19,7 +19,7 @@ use Psr\Cache\CacheItemInterface;
  * @author Aaron Scherer <aequasi@gmail.com>
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class RedisCachePool extends AbstractCachePool
+class PredisCachePool extends AbstractCachePool
 {
     /**
      * @type Client
