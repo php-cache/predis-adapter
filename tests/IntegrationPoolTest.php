@@ -12,24 +12,10 @@
 namespace Cache\Adapter\Predis\Tests;
 
 use Cache\Adapter\Predis\PredisCachePool;
-use Cache\IntegrationTests\CachePoolTest as BaseTest;
+use Cache\IntegrationTests\CachePoolTest;
 use Predis\Client;
 
-class IntegrationPoolTest extends BaseTest
+class IntegrationPoolTest extends CachePoolTest
 {
-    private $client = null;
-
-    public function createCachePool()
-    {
-        return new PredisCachePool($this->getClient());
-    }
-
-    private function getClient()
-    {
-        if ($this->client === null) {
-            $this->client = new Client('tcp:/127.0.0.1:6379');
-        }
-
-        return $this->client;
-    }
+    use CreatePoolTrait;
 }

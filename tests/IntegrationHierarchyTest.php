@@ -12,10 +12,10 @@
 namespace Cache\Adapter\Predis\Tests;
 
 use Cache\Adapter\Predis\PredisCachePool;
-use Cache\IntegrationTests\TaggableCachePoolTest;
+use Cache\IntegrationTests\HierarchicalCachePoolTest;
 use Predis\Client;
 
-class IntegrationTagTest extends TaggableCachePoolTest
+class IntegrationHierarchyTest extends HierarchicalCachePoolTest
 {
     use CreatePoolTrait;
 }
