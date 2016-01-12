@@ -49,6 +49,9 @@ class PredisCachePool extends AbstractCachePool implements HierarchicalPoolInter
 
     protected function clearOneObjectFromCache($key)
     {
+        // We have to commit here to be able to remove deferred hierarchy items
+        $this->commit();
+
         $keyString = $this->getHierarchyKey($key, $path);
         $this->cache->incr($path);
         $this->clearHierarchyKeyCache();

@@ -11,9 +11,7 @@
 
 namespace Cache\Adapter\Predis\Tests;
 
-use Cache\Adapter\Predis\PredisCachePool;
 use Cache\IntegrationTests\CachePoolTest;
-use Predis\Client;
 
 class IntegrationPoolTest extends CachePoolTest
 {
