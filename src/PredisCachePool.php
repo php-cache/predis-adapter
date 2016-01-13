@@ -12,15 +12,18 @@
 namespace Cache\Adapter\Predis;
 
 use Cache\Adapter\Common\AbstractCachePool;
+use Cache\Hierarchy\HierarchicalCachePoolTrait;
+use Cache\Hierarchy\HierarchicalPoolInterface;
 use Predis\Client;
 use Psr\Cache\CacheItemInterface;
 
 /**
- * @author Aaron Scherer <aequasi@gmail.com>
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class PredisCachePool extends AbstractCachePool
+class PredisCachePool extends AbstractCachePool implements HierarchicalPoolInterface
 {
+    use HierarchicalCachePoolTrait;
+
     /**
      * @type Client
      */
@@ -34,24 +37,9 @@ class PredisCachePool extends AbstractCachePool
         $this->cache = $cache;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasItem($key, array $tags = [])
-    {
-        $this->validateKey($key);
-        $taggedKey = $this->generateCacheKey($key, $tags);
-
-        if (isset($this->deferred[$key])) {
-            return true;
-        }
-
-        return $this->cache->exists($taggedKey);
-    }
-
     protected function fetchObjectFromCache($key)
     {
-        return unserialize($this->cache->get($key));
+        return unserialize($this->cache->get($this->getHierarchyKey($key)));
     }
 
     protected function clearAllObjectsFromCache()
@@ -61,15 +49,28 @@ class PredisCachePool extends AbstractCachePool
 
     protected function clearOneObjectFromCache($key)
     {
-        return $this->cache->del($key) >= 0;
+        // We have to commit here to be able to remove deferred hierarchy items
+        $this->commit();
+
+        $keyString = $this->getHierarchyKey($key, $path);
+        $this->cache->incr($path);
+        $this->clearHierarchyKeyCache();
+
+        return $this->cache->del($keyString) >= 0;
     }
 
     protected function storeItemInCache($key, CacheItemInterface $item, $ttl)
     {
+        $key = $this->getHierarchyKey($key);
         if ($ttl === null) {
             return 'OK' === $this->cache->set($key, serialize($item))->getPayload();
         }
 
         return 'OK' === $this->cache->setex($key, $ttl, serialize($item))->getPayload();
+    }
+
+    protected function getValueFormStore($key)
+    {
+        return $this->cache->get($key);
     }
 }
