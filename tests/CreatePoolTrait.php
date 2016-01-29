@@ -26,7 +26,7 @@ trait CreatePoolTrait
     private function getClient()
     {
         if ($this->client === null) {
-            $this->client = new Client('tcp:/127.0.0.1:6379');
+            $this->client = new Client('tcp://127.0.0.1:6379');
         }
 
         return $this->client;
