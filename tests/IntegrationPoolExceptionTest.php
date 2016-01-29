@@ -18,9 +18,9 @@ class IntegrationPoolExceptionTest extends CachePoolTest
     use CreateInvalidPoolTrait;
 
     protected $skippedTests = [
-        'testGetItemsEmpty' => 'getItems doesn\'t access the Redis sever.',
-        'testGetItemInvalidKeys' => 'testGetItemInvalidKeys should throw \Cache\Adapter\Common\Exception\InvalidArgumentException.',
-        'testHasItemInvalidKeys' => 'testHasItemInvalidKeys should throw \Cache\Adapter\Common\Exception\InvalidArgumentException.',
+        'testGetItemsEmpty'         => 'getItems doesn\'t access the Redis sever.',
+        'testGetItemInvalidKeys'    => 'testGetItemInvalidKeys should throw \Cache\Adapter\Common\Exception\InvalidArgumentException.',
+        'testHasItemInvalidKeys'    => 'testHasItemInvalidKeys should throw \Cache\Adapter\Common\Exception\InvalidArgumentException.',
         'testDeleteItemInvalidKeys' => 'testDeleteItemInvalidKeys should throw \Cache\Adapter\Common\Exception\InvalidArgumentException.',
     ];
 
