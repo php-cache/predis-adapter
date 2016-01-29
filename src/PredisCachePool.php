@@ -15,6 +15,7 @@ use Cache\Adapter\Common\AbstractCachePool;
 use Cache\Hierarchy\HierarchicalCachePoolTrait;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Predis\Client;
+use Predis\PredisException;
 use Psr\Cache\CacheItemInterface;
 
 /**
@@ -39,38 +40,58 @@ class PredisCachePool extends AbstractCachePool implements HierarchicalPoolInter
 
     protected function fetchObjectFromCache($key)
     {
-        return unserialize($this->cache->get($this->getHierarchyKey($key)));
+        try {
+            return unserialize($this->cache->get($this->getHierarchyKey($key)));
+        } catch (PredisException $e) {
+            throw new PredisCacheException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     protected function clearAllObjectsFromCache()
     {
-        return 'OK' === $this->cache->flushdb()->getPayload();
+        try {
+            return 'OK' === $this->cache->flushdb()->getPayload();
+        } catch (PredisException $e) {
+            throw new PredisCacheException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     protected function clearOneObjectFromCache($key)
     {
-        // We have to commit here to be able to remove deferred hierarchy items
-        $this->commit();
+        try {
+            // We have to commit here to be able to remove deferred hierarchy items
+            $this->commit();
 
-        $keyString = $this->getHierarchyKey($key, $path);
-        $this->cache->incr($path);
-        $this->clearHierarchyKeyCache();
+            $keyString = $this->getHierarchyKey($key, $path);
+            $this->cache->incr($path);
+            $this->clearHierarchyKeyCache();
 
-        return $this->cache->del($keyString) >= 0;
+            return $this->cache->del($keyString) >= 0;
+        } catch (PredisException $e) {
+            throw new PredisCacheException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     protected function storeItemInCache($key, CacheItemInterface $item, $ttl)
     {
-        $key = $this->getHierarchyKey($key);
-        if ($ttl === null) {
-            return 'OK' === $this->cache->set($key, serialize($item))->getPayload();
-        }
+        try {
+            $key = $this->getHierarchyKey($key);
+            if ($ttl === null) {
+                return 'OK' === $this->cache->set($key, serialize($item))->getPayload();
+            }
 
-        return 'OK' === $this->cache->setex($key, $ttl, serialize($item))->getPayload();
+            return 'OK' === $this->cache->setex($key, $ttl, serialize($item))->getPayload();
+        } catch (PredisException $e) {
+            throw new PredisCacheException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     protected function getValueFormStore($key)
     {
-        return $this->cache->get($key);
+        try {
+            return $this->cache->get($key);
+        } catch (PredisException $e) {
+            throw new PredisCacheException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
